@@ -2,7 +2,6 @@ body {
     text-align: center;
 }
 
-.sameLine{
-    display: flex;
-    justify-content: center;
+li {
+    display: inline-block;
 }
