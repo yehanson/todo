@@ -2,12 +2,16 @@ const input= document.querySelector('.input');
 const btn= document.querySelector('.btn');
 const container= document.querySelector('.container');
 const ed= document.querySelector('.ed');
+const dl= document.querySelector('.dl');
+const ul= document.querySelector('.ul');
 let array;
 let placeholder;
 
 btn.addEventListener('click', add);
 container.addEventListener('click', button);
 ed.addEventListener('click', button);
+dl.addEventListener('click', download);
+ul.addEventListener('change', upload);
 
 window.onload= display();
 
@@ -111,4 +115,30 @@ function removeLocal(e){
 
     array.splice(array.indexOf(e.target.parentElement.children[0].innerHTML), 1);
     localStorage.setItem('todo', JSON.stringify(array));
+};
+
+function download(){
+    const newdl= document.createElement('a');
+    //mime type for json 'data:application/json;charset=utf-8,'
+    newdl.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(array)));
+    newdl.setAttribute('download', 'array');
+    newdl.style.display= 'none';
+    document.body.appendChild(newdl);
+    newdl.click();
+    document.body.removeChild(newdl);
+};
+
+function upload(){
+    const read= new FileReader();
+    read.readAsText(ul.files[0]);
+    read.onload= function(){
+        let newarrayv= JSON.parse(read.result);
+        let newarrayl= JSON.parse(read.result).length;
+        
+        for(x=0; x<newarrayl; x++){
+            array.push(newarrayv[x]);
+            localStorage.setItem('todo', JSON.stringify(array));
+        };
+    };
+    window.location.reload();
 };
